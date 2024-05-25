@@ -2,41 +2,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.integrate as spi
 
-# Визначення функції та межі інтегрування
+# Визначення функції
 def f(x):
     return x ** 2
 
-a = 0  # Нижня межа
-b = 2  # Верхня межа
+# Межі інтегрування
+a = 0
+b = 2
 
-# Метод Монте-Карло для обчислення інтеграла
-def monte_carlo_integral(f, a, b, num_samples):
-    x_random = np.random.uniform(a, b, num_samples)
-    y_random = f(x_random)
-    integral_value = (b - a) * np.mean(y_random)
-    return integral_value
+# Кількість випадкових точок для методу Монте-Карло
+N = 10000
 
-# Параметри для методу Монте-Карло
-num_samples = 10000
-mc_integral = monte_carlo_integral(f, a, b, num_samples)
+# Обчислення інтеграла методом Монте-Карло
+x_random = np.random.uniform(a, b, N)
+y_random = f(x_random)
+integral_monte_carlo = (b - a) * np.mean(y_random)
 
-# Аналітичне обчислення інтегралу для порівняння
-analytical_integral, error = spi.quad(f, a, b)
+# Обчислення інтеграла аналітично за допомогою функції quad
+result, error = spi.quad(f, a, b)
 
 # Виведення результатів
-print("Інтеграл методом Монте-Карло: ", mc_integral)
-print("Аналітичний інтеграл: ", analytical_integral)
-print("Абсолютна похибка: ", abs(mc_integral - analytical_integral))
+print(f"Значення інтеграла за методом Монте-Карло: {integral_monte_carlo}")
+print(f"Аналітичне значення інтеграла: {result}")
+print(f"Абсолютна похибка методу Монте-Карло: {abs(integral_monte_carlo - result)}")
 
-# Створення діапазону значень для x
+# Побудова графіка
 x = np.linspace(-0.5, 2.5, 400)
 y = f(x)
 
-# Створення графіка
 fig, ax = plt.subplots()
 
 # Малювання функції
 ax.plot(x, y, 'r', linewidth=2)
+
+# Відображення точок Монте-Карло
+ax.scatter(x_random, y_random, color='blue', s=5, alpha=0.5)
 
 # Заповнення області під кривою
 ix = np.linspace(a, b)
